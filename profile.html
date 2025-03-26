@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Profile - Lost and Linked</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        body {
+            background-color: #f5f5f5;
+        }
+
+        .navbar {
+            background-color: #008080;
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            color: white;
+            font-size: 1.5rem;
+            font-weight: 600;
+            text-decoration: none;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 2rem auto;
+            padding: 0 1rem;
+        }
+
+        .profile-card {
+            background: white;
+            border-radius: 15px;
+            padding: 2rem;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        .points-section {
+            text-align: center;
+            padding: 2rem;
+            margin: 1rem 0;
+            background: linear-gradient(135deg, #008080 0%, #006666 100%);
+            border-radius: 10px;
+            color: white;
+        }
+
+        .points-badge {
+            font-size: 3rem;
+            font-weight: 600;
+            margin: 1rem 0;
+        }
+
+        .rewards-history {
+            margin-top: 2rem;
+        }
+
+        .history-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 1rem;
+            border-bottom: 1px solid #eee;
+        }
+
+        .btn {
+            padding: 0.8rem 1.5rem;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: 500;
+        }
+
+        .btn-primary {
+            background-color: #008080;
+            color: white;
+        }
+
+        .nav-buttons {
+            display: flex;
+            gap: 1rem;
+        }
+
+        .logout-btn {
+            background-color: white;
+            color: #008080;
+            padding: 0.5rem 1rem;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar">
+        <a href="dashboard.html" class="logo">Lost and Linked</a>
+        <div class="nav-buttons">
+            <button class="btn-primary" onclick="window.location.href='dashboard.html'">Dashboard</button>
+            <button class="logout-btn" onclick="confirmLogout()">Logout</button>
+        </div>
+    </nav>
+
+    <div class="container">
+        <div class="profile-card">
+            <h2>User Profile</h2>
+            
+            <div class="points-section">
+                <h3>Reward Points</h3>
+                <div class="points-badge" id="totalPoints">0</div>
+                <p>Points earned for helping others find their lost items!</p>
+            </div>
+
+            <div class="rewards-history">
+                <h3>Points History</h3>
+                <div id="historyList">
+                    <!-- Points history will be populated here -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Load and display points
+        function loadPoints() {
+            const points = localStorage.getItem('rewardPoints') || 0;
+            document.getElementById('totalPoints').textContent = points;
+            
+            // Load points history
+            const history = JSON.parse(localStorage.getItem('pointsHistory')) || [];
+            const historyList = document.getElementById('historyList');
+            historyList.innerHTML = '';
+            
+            history.forEach(item => {
+                const historyItem = document.createElement('div');
+                historyItem.className = 'history-item';
+                historyItem.innerHTML = `
+                    <span>${item.description}</span>
+                    <span>+${item.points} points</span>
+                `;
+                historyList.appendChild(historyItem);
+            });
+        }
+
+        function confirmLogout() {
+            if (confirm("Are you sure you want to logout?")) {
+                window.location.href = 'index.html';
+            }
+        }
+
+        window.onload = loadPoints;
+    </script>
+</body>
+</html>

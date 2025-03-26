@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lost and Linked - Find What Matters</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        body {
+            background-color: #f5f5f5;
+        }
+
+        .navbar {
+            background-color: rgba(0, 128, 128, 0.95);
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .logo {
+            color: white;
+            font-size: 1.5rem;
+            font-weight: 600;
+            text-decoration: none;
+        }
+
+        .hero {
+            height: 100vh;
+            background: 
+                linear-gradient(120deg, rgba(0,128,128,0.9), rgba(0,128,128,0.7)),
+                url('https://images.unsplash.com/photo-1596526131083-e8c633c948d2?w=1600') center/cover;
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: 
+                radial-gradient(circle at 30% 50%, rgba(255,255,255,0.1) 0%, transparent 50%),
+                radial-gradient(circle at 70% 50%, rgba(255,255,255,0.1) 0%, transparent 50%);
+            animation: shimmer 8s infinite;
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 2;
+            text-align: center;
+            padding: 0 2rem;
+            color: white;
+        }
+
+        .hero-content h1 {
+            font-size: 4.5rem;
+            margin-bottom: 1.5rem;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
+            animation: fadeInUp 1s ease-out;
+        }
+
+        .hero-content p {
+            font-size: 1.5rem;
+            margin-bottom: 2rem;
+            max-width: 800px;
+            margin-left: auto;
+            margin-right: auto;
+            animation: fadeInUp 1s ease-out 0.3s backwards;
+        }
+
+        .btn {
+            padding: 1.2rem 3rem;
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            font-size: 1.2rem;
+            transition: all 0.3s ease;
+            font-weight: 500;
+            animation: fadeInUp 1s ease-out 0.6s backwards;
+        }
+
+        .btn-primary {
+            background: rgba(255,255,255,0.9);
+            color: #008080;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.2);
+            background: white;
+        }
+
+        .section {
+            padding: 6rem 2rem;
+        }
+
+        .about-us {
+            background: linear-gradient(135deg, #fff 50%, rgba(0,128,128,0.1) 100%);
+            text-align: center;
+        }
+
+        .about-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+            max-width: 1200px;
+            margin: 3rem auto;
+        }
+
+        .about-card {
+            padding: 2rem;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            transition: transform 0.3s ease;
+        }
+
+        .about-card:hover {
+            transform: translateY(-10px);
+        }
+
+        .about-icon {
+            font-size: 2.5rem;
+            color: #008080;
+            margin-bottom: 1rem;
+        }
+
+        .testimonials {
+            background-color: #f5f5f5;
+        }
+
+        .testimonial-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .testimonial-card {
+            background: white;
+            padding: 2rem;
+            border-radius: 15px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            position: relative;
+        }
+
+        .testimonial-card::before {
+            content: '"';
+            position: absolute;
+            top: -20px;
+            left: 20px;
+            font-size: 60px;
+            color: #008080;
+            opacity: 0.3;
+        }
+
+        .user-img {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            margin-bottom: 1rem;
+        }
+
+        h2 {
+            color: #008080;
+            margin-bottom: 1.5rem;
+            font-size: 2.5rem;
+        }
+
+        @keyframes shimmer {
+            0%, 100% { opacity: 0.5; }
+            50% { opacity: 0.8; }
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar">
+        <a href="index.html" class="logo">Lost and Linked</a>
+    </nav>
+
+    <section class="hero">
+        <div class="hero-content">
+            <h1>Lost & Linked</h1>
+            <p>Bridging the Gap Between Lost Treasures and Their Rightful Owners</p>
+            <a href="login.html"><button class="btn btn-primary">Begin Your Journey</button></a>
+        </div>
+    </section>
+
+    <section class="section about-us">
+        <h2>About Us</h2>
+        <div class="about-grid">
+            <div class="about-card">
+                <div class="about-icon">🔍</div>
+                <h3>Smart Search</h3>
+                <p>Advanced matching algorithms to connect lost items with their owners quickly and efficiently.</p>
+            </div>
+            <div class="about-card">
+                <div class="about-icon">🔒</div>
+                <h3>Secure Platform</h3>
+                <p>State-of-the-art security measures to protect user data and verify item ownership.</p>
+            </div>
+            <div class="about-card">
+                <div class="about-icon">🤝</div>
+                <h3>Community Driven</h3>
+                <p>A trusted network of users helping each other reunite with their lost belongings.</p>
+            </div>
+            <div class="about-card">
+                <div class="about-icon">⚡</div>
+                <h3>Instant Alerts</h3>
+                <p>Real-time notifications when matching items are found or claimed.</p>
+            </div>
+        </div>
+    </section>
+
+    <section class="section testimonials">
+        <h2>Success Stories</h2>
+        <div class="testimonial-grid">
+            <div class="testimonial-card">
+                <img src="https://randomuser.me/api/portraits/women/1.jpg" alt="User" class="user-img">
+                <p>"Lost my laptop at the university campus. Within hours, someone found it and contacted me through Lost and Linked. The verification process was smooth and secure!"</p>
+                <p><strong>- Manisha Mishra</strong><br>Student</p>
+            </div>
+            <div class="testimonial-card">
+                <img src="https://randomuser.me/api/portraits/men/1.jpg" alt="User" class="user-img">
+                <p>"Found a wallet during my morning jog. Thanks to Lost and Linked, I was able to return it to its rightful owner the same day. Great platform!"</p>
+                <p><strong>- Rinita Abrahan</strong><br>Fitness Trainer</p>
+            </div>
+            <div class="testimonial-card">
+                <img src="https://randomuser.me/api/portraits/women/2.jpg" alt="User" class="user-img">
+                <p>"Lost my engagement ring at a restaurant. Was devastated until someone posted it on Lost and Linked. Forever grateful for this amazing community!"</p>
+                <p><strong>- Ann Mary James</strong><br>Architect</p>
+            </div>
+            <div class="testimonial-card">
+                <img src="https://randomuser.me/api/portraits/men/2.jpg" alt="User" class="user-img">
+                <p>"As a frequent traveler, I once left my passport holder at the airport. Thanks to Lost and Linked's quick alert system, it was found before my flight!"</p>
+                <p><strong>- Neha Joshua</strong><br>Business Consultant</p>
+            </div>
+            <div class="testimonial-card">
+                <img src="https://randomuser.me/api/portraits/men/3.jpg" alt="User" class="user-img">
+                <p>"The points system is fantastic! Not only did I help someone find their lost laptop, but I also earned reward points. It's great to see good deeds being recognized. The community here is amazing!"</p>
+                <p><strong>- Jerusha Paul</strong><br>Software Engineer</p>
+            </div>
+
+            <div class="testimonial-card">
+                <img src="https://randomuser.me/api/portraits/women/3.jpg" alt="User" class="user-img">
+                <p>"I lost my designer handbag at a coffee shop, and thanks to the instant SMS notification system, I was reunited with it within an hour! The person who found it got their well-deserved points, and I got my bag back. Win-win!"</p>
+                <p><strong>- Beenish Saeed</strong><br>Fashion Designer</p>
+            </div>
+        </div>
+    </section>
+</body>
+</html>

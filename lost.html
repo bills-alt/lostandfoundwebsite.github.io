@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Report Lost Item - Lost and Linked</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        body {
+            background-color: #f5f5f5;
+            min-height: 100vh;
+        }
+
+        .navbar {
+            background-color: #008080;
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            color: white;
+            font-size: 1.5rem;
+            font-weight: 600;
+            text-decoration: none;
+        }
+
+        .logout-btn {
+            background-color: white;
+            color: #008080;
+            padding: 0.5rem 1rem;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 2rem auto;
+            padding: 2rem;
+        }
+
+        .form-container {
+            background: white;
+            padding: 2rem;
+            border-radius: 15px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+
+        h2 {
+            color: #008080;
+            margin-bottom: 2rem;
+            text-align: center;
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 0.5rem;
+            color: #333;
+            font-weight: 500;
+        }
+
+        input, textarea, select {
+            width: 100%;
+            padding: 0.8rem;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 1rem;
+        }
+
+        textarea {
+            resize: vertical;
+            min-height: 100px;
+        }
+
+        .btn {
+            padding: 1rem 2rem;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+
+        .btn-primary {
+            background-color: #008080;
+            color: white;
+            width: 100%;
+        }
+
+        .btn-primary:hover {
+            background-color: #006666;
+        }
+
+        .navigation {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 2rem;
+        }
+
+        .nav-btn {
+            padding: 0.5rem 1rem;
+            background-color: transparent;
+            border: 1px solid #008080;
+            color: #008080;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .image-preview {
+            max-width: 200px;
+            margin-top: 1rem;
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar">
+        <a href="dashboard.html" class="logo">Lost and Linked</a>
+        <a href="index.html"><button class="logout-btn">Logout</button></a>
+    </nav>
+
+    <div class="container">
+        <div class="form-container">
+            <h2>Report Lost Item</h2>
+            <form onsubmit="return validateForm()">
+                <div class="form-group">
+                    <label for="title">Item Title*</label>
+                    <input type="text" id="title" required placeholder="E.g., Black Leather Wallet">
+                </div>
+
+                <div class="form-group">
+                    <label for="category">Category*</label>
+                    <select id="category" required>
+                        <option value="">Select Category</option>
+                        <option value="electronics">Electronics</option>
+                        <option value="wallet">Wallet/Purse</option>
+                        <option value="documents">Documents</option>
+                        <option value="jewelry">Jewelry</option>
+                        <option value="keys">Keys</option>
+                        <option value="clothing">Clothing</option>
+                        <option value="other">Other</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="description">Description*</label>
+                    <textarea id="description" required placeholder="Provide detailed description including brand, color, distinguishing marks..."></textarea>
+                </div>
+
+                <div class="form-group">
+                    <label for="date">Date Lost*</label>
+                    <input type="date" id="date" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="location">Last Known Location*</label>
+                    <input type="text" id="location" required placeholder="Be as specific as possible">
+                </div>
+
+                <div class="form-group">
+                    <label for="image">Upload Images</label>
+                    <input type="file" id="image" accept="image/*" multiple onchange="previewImage(this)">
+                    <img id="imagePreview" class="image-preview">
+                </div>
+
+                <div class="form-group">
+                    <label for="reward">Reward (if any)</label>
+                    <input type="text" id="reward" placeholder="Optional: Specify reward if offered">
+                </div>
+
+                <div class="form-group">
+                    <label for="contact">Contact Information*</label>
+                    <input type="text" id="contact" required placeholder="Phone number or email">
+                </div>
+
+                <div class="navigation">
+                    <a href="dashboard.html"><button type="button" class="nav-btn">Previous</button></a>
+                    <button type="submit" class="btn btn-primary">Submit Report</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        function validateForm() {
+            // Basic form validation
+            const requiredFields = ['title', 'category', 'description', 'date', 'location', 'contact'];
+            for (let field of requiredFields) {
+                const value = document.getElementById(field).value.trim();
+                if (!value) {
+                    alert('Please fill in all required fields');
+                    return false;
+                }
+            }
+            return true;
+        }
+
+        function previewImage(input) {
+            const preview = document.getElementById('imagePreview');
+            if (input.files && input.files[0]) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    preview.src = e.target.result;
+                    preview.style.display = 'block';
+                }
+                reader.readAsDataURL(input.files[0]);
+            }
+        }
+    </script>
+</body>
+</html>
