@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Unclaimed Items - Lost and Linked</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        body {
+            background-color: #f5f5f5;
+        }
+
+        .navbar {
+            background-color: #008080;
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .logo {
+            color: white;
+            font-size: 1.5rem;
+            font-weight: 600;
+            text-decoration: none;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 80px auto 2rem;
+            padding: 0 2rem;
+        }
+
+        .items-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+
+        .item-card {
+            background: white;
+            border-radius: 10px;
+            padding: 1.5rem;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        .item-image {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+            border-radius: 5px;
+            margin-bottom: 1rem;
+        }
+
+        .btn {
+            padding: 0.8rem 1.5rem;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: 500;
+            background-color: #008080;
+            color: white;
+            width: 100%;
+            margin-top: 1rem;
+        }
+
+        .header {
+            background: white;
+            padding: 2rem;
+            border-radius: 10px;
+            margin-bottom: 2rem;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        .eligibility-notice {
+            background: #ffd700;
+            color: #333;
+            padding: 1rem;
+            border-radius: 5px;
+            margin: 1rem 0;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar">
+        <a href="dashboard.html" class="logo">Lost and Linked</a>
+        <button class="btn" onclick="window.location.href='profile.html'" style="width: auto;">Back to Profile</button>
+    </nav>
+
+    <div class="container">
+        <div class="header">
+            <h1>Unclaimed Items Available</h1>
+            <div id="eligibilityNotice" class="eligibility-notice"></div>
+        </div>
+
+        <div class="items-grid" id="unclaimedItems">
+            <!-- Items will be populated here -->
+        </div>
+    </div>
+
+    <script>
+        function checkEligibility() {
+            const points = parseInt(localStorage.getItem('rewardPoints')) || 0;
+            const notice = document.getElementById('eligibilityNotice');
+            
+            if (points >= 100) {
+                notice.innerHTML = "🎉 You have enough points to claim one free item!";
+                loadUnclaimedItems();
+            } else {
+                notice.innerHTML = `You need 100 points to claim a free item. Current points: ${points}`;
+                document.getElementById('unclaimedItems').innerHTML = 
+                    '<p style="text-align: center; grid-column: 1/-1;">Earn more points to unlock free items!</p>';
+            }
+        }
+
+        function loadUnclaimedItems() {
+            const items = [
+                {
+                    id: 1,
+                    name: "Vintage Watch",
+                    description: "Found at Central Park, unclaimed for 6 months",
+                    image: "https://via.placeholder.com/300x200"
+                },
+                {
+                    id: 2,
+                    name: "Designer Sunglasses",
+                    description: "Found at Shopping Mall, unclaimed for 8 months",
+                    image: "https://via.placeholder.com/300x200"
+                },
+                {
+                    id: 3,
+                    name: "Leather Wallet",
+                    description: "Found at Train Station, unclaimed for 1 year",
+                    image: "https://via.placeholder.com/300x200"
+                }
+            ];
+
+            const container = document.getElementById('unclaimedItems');
+            container.innerHTML = '';
+
+            items.forEach(item => {
+                const card = document.createElement('div');
+                card.className = 'item-card';
+                card.innerHTML = `
+                    <img src="${item.image}" alt="${item.name}" class="item-image">
+                    <h3>${item.name}</h3>
+                    <p>${item.description}</p>
+                    <button class="btn" onclick="claimItem(${item.id})">Claim This Item</button>
+                `;
+                container.appendChild(card);
+            });
+        }
+
+        function claimItem(itemId) {
+            if(confirm("Are you sure you want to claim this item? This will use your reward points.")) {
+                alert("Item claimed successfully! Our team will contact you for pickup arrangements.");
+                // Deduct points after claiming
+                let points = parseInt(localStorage.getItem('rewardPoints')) || 0;
+                points -= 100;
+                localStorage.setItem('rewardPoints', points);
+                window.location.href = 'profile.html';
+            }
+        }
+
+        window.onload = checkEligibility;
+    </script>
+</body>
+</html>
