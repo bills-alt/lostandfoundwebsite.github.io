@@ -15,7 +15,6 @@
 
         body {
             background-color: #f5f5f5;
-            min-height: 100vh;
         }
 
         .navbar {
@@ -33,32 +32,32 @@
             text-decoration: none;
         }
 
-        .logout-btn {
+        .nav-buttons {
+            display: flex;
+            gap: 1rem;
+        }
+
+        .nav-btn, .logout-btn {
             background-color: white;
             color: #008080;
             padding: 0.5rem 1rem;
             border: none;
             border-radius: 5px;
             cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .nav-btn:hover, .logout-btn:hover {
+            background-color: #f0f0f0;
         }
 
         .container {
             max-width: 800px;
             margin: 2rem auto;
             padding: 2rem;
-        }
-
-        .form-container {
             background: white;
-            padding: 2rem;
-            border-radius: 15px;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
-        }
-
-        h2 {
-            color: #008080;
-            margin-bottom: 2rem;
-            text-align: center;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
         }
 
         .form-group {
@@ -69,10 +68,9 @@
             display: block;
             margin-bottom: 0.5rem;
             color: #333;
-            font-weight: 500;
         }
 
-        input, textarea, select {
+        input, select, textarea {
             width: 100%;
             padding: 0.8rem;
             border: 1px solid #ddd;
@@ -80,48 +78,47 @@
             font-size: 1rem;
         }
 
-        textarea {
-            resize: vertical;
-            min-height: 100px;
+        input:focus, select:focus, textarea:focus {
+            outline: none;
+            border-color: #008080;
         }
 
         .btn {
             padding: 1rem 2rem;
+            background-color: #008080;
+            color: white;
             border: none;
             border-radius: 5px;
             cursor: pointer;
-            font-weight: 500;
-            transition: all 0.3s ease;
+            font-size: 1rem;
+            transition: background-color 0.3s;
         }
 
-        .btn-primary {
-            background-color: #008080;
-            color: white;
-            width: 100%;
-        }
-
-        .btn-primary:hover {
+        .btn:hover {
             background-color: #006666;
         }
 
-        .navigation {
-            display: flex;
-            justify-content: space-between;
-            margin-top: 2rem;
-        }
-
-        .nav-btn {
-            padding: 0.5rem 1rem;
-            background-color: transparent;
-            border: 1px solid #008080;
-            color: #008080;
-            border-radius: 5px;
-            cursor: pointer;
-        }
-
         .image-preview {
-            max-width: 200px;
+            width: 200px;
+            height: 200px;
+            border: 2px dashed #ddd;
             margin-top: 1rem;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+        }
+
+        .image-preview img {
+            max-width: 100%;
+            max-height: 100%;
+            object-fit: cover;
+        }
+
+        .error-message {
+            color: #ff4444;
+            font-size: 0.9rem;
+            margin-top: 0.5rem;
             display: none;
         }
     </style>
@@ -129,113 +126,112 @@
 <body>
     <nav class="navbar">
         <a href="dashboard.html" class="logo">Lost and Linked</a>
-        <button class="logout-btn" onclick="confirmLogout()">Logout</button>
+        <div class="nav-buttons">
+            <button class="nav-btn" onclick="window.location.href='dashboard.html'">Previous</button>
+            <button class="logout-btn" onclick="confirmLogout()">Logout</button>
+        </div>
     </nav>
 
     <div class="container">
-        <div class="form-container">
-            <h2>Report Found Item</h2>
-            <form onsubmit="return validateForm()">
-                <div class="form-group">
-                    <label for="title">Item Title*</label>
-                    <input type="text" id="title" required placeholder="E.g., Found iPhone">
-                </div>
+        <h2>Report Found Item</h2>
+        <form id="reportForm" onsubmit="return submitReport(event)">
+            <div class="form-group">
+                <label for="itemName">Item Name</label>
+                <input type="text" id="itemName" name="itemName" required>
+            </div>
 
-                <div class="form-group">
-                    <label for="category">Category*</label>
-                    <select id="category" required>
-                        <option value="">Select Category</option>
-                        <option value="electronics">Electronics</option>
-                        <option value="wallet">Wallet/Purse</option>
-                        <option value="documents">Documents</option>
-                        <option value="jewelry">Jewelry</option>
-                        <option value="keys">Keys</option>
-                        <option value="clothing">Clothing</option>
-                        <option value="other">Other</option>
-                    </select>
-                </div>
+            <div class="form-group">
+                <label for="category">Category</label>
+                <select id="category" name="category" required>
+                    <option value="">Select a category</option>
+                    <option value="electronics">Electronics</option>
+                    <option value="wallet">Wallet/Purse</option>
+                    <option value="documents">Documents</option>
+                    <option value="jewelry">Jewelry</option>
+                    <option value="keys">Keys</option>
+                    <option value="clothing">Clothing</option>
+                    <option value="other">Other</option>
+                </select>
+            </div>
 
-                <div class="form-group">
-                    <label for="description">Description*</label>
-                    <textarea id="description" required placeholder="Provide general description without revealing unique identifying details"></textarea>
-                </div>
+            <div class="form-group">
+                <label for="date">Date Found</label>
+                <input type="date" id="date" name="date" required>
+            </div>
 
-                <div class="form-group">
-                    <label for="date">Date Found*</label>
-                    <input type="date" id="date" required>
-                </div>
+            <div class="form-group">
+                <label for="location">Location Found</label>
+                <input type="text" id="location" name="location" required>
+            </div>
 
-                <div class="form-group">
-                    <label for="location">Location Found*</label>
-                    <input type="text" id="location" required placeholder="Where did you find the item?">
-                </div>
+            <div class="form-group">
+                <label for="description">Description</label>
+                <textarea id="description" name="description" rows="4" required 
+                    placeholder="Please provide detailed description to help the owner identify their item"></textarea>
+            </div>
 
-                <div class="form-group">
-                    <label for="image">Upload Images</label>
-                    <input type="file" id="image" accept="image/*" multiple onchange="previewImage(this)">
-                    <img id="imagePreview" class="image-preview">
-                    <small>Upload images that don't reveal identifying details</small>
+            <div class="form-group">
+                <label for="image">Upload Image</label>
+                <input type="file" id="image" name="image" accept="image/*" onchange="previewImage(event)">
+                <div class="image-preview" id="imagePreviewContainer">
+                    <img id="imagePreview" src="#" alt="Preview" style="display: none;">
+                    <span id="previewText">Image Preview</span>
                 </div>
+            </div>
 
-                <div class="form-group">
-                    <label for="storage">Current Storage Location*</label>
-                    <input type="text" id="storage" required placeholder="Where are you keeping the item?">
-                </div>
-
-                <div class="form-group">
-                    <label for="identifying">Identifying Details*</label>
-                    <textarea id="identifying" required placeholder="List specific details that only the owner would know (will not be publicly displayed)"></textarea>
-                </div>
-
-                <div class="form-group">
-                    <label for="contact">Your Contact Information*</label>
-                    <input type="text" id="contact" required placeholder="How can we reach you?">
-                </div>
-
-                <div class="navigation">
-                    <a href="dashboard.html"><button type="button" class="nav-btn">Previous</button></a>
-                    <button type="submit" class="btn btn-primary">Submit Report</button>
-                </div>
-            </form>
-        </div>
+            <button type="submit" class="btn">Submit Report</button>
+        </form>
     </div>
 
     <script>
-        function confirmLogout() {
-            const form = document.querySelector('form');
-            const hasUnsavedChanges = Array.from(form.elements).some(element => element.value !== '');
-            
-            let message = "Are you sure you want to logout?";
-            if (hasUnsavedChanges) {
-                message += " Your report data will be lost!";
-            }
-            if (confirm(message)) {
-                window.location.href = 'index.html';
-            }
-        }
-        function validateForm() {
-            const requiredFields = ['title', 'category', 'description', 'date', 'location', 'storage', 'identifying', 'contact'];
-            for (let field of requiredFields) {
-                const value = document.getElementById(field).value.trim();
-                if (!value) {
-                    alert('Please fill in all required fields');
-                    return false;
-                }
-            }
-            return true;
-        }
-
-        function previewImage(input) {
+        function previewImage(event) {
+            const file = event.target.files[0];
             const preview = document.getElementById('imagePreview');
-            if (input.files && input.files[0]) {
+            const previewText = document.getElementById('previewText');
+
+            if (file) {
                 const reader = new FileReader();
                 reader.onload = function(e) {
                     preview.src = e.target.result;
                     preview.style.display = 'block';
+                    previewText.style.display = 'none';
                 }
-                reader.readAsDataURL(input.files[0]);
+                reader.readAsDataURL(file);
             }
         }
+
+        function submitReport(event) {
+            event.preventDefault();
+
+            const report = {
+                id: Date.now(),
+                title: document.getElementById('itemName').value,
+                category: document.getElementById('category').value,
+                description: document.getElementById('description').value,
+                date: document.getElementById('date').value,
+                location: document.getElementById('location').value,
+                status: 'found',
+                image: document.getElementById('imagePreview').src,
+                finder: localStorage.getItem('username') || 'Anonymous'
+            };
+
+            let foundItems = JSON.parse(localStorage.getItem('foundItems')) || [];
+            foundItems.push(report);
+            localStorage.setItem('foundItems', JSON.stringify(foundItems));
+
+            alert('Item reported successfully!');
+            window.location.href = 'dashboard.html';
+            return false;
+        }
+
+        function confirmLogout() {
+            if (confirm("Are you sure you want to logout?")) {
+                window.location.href = 'index.html';
+            }
+        }
+
+        // Set max date as today
+        document.getElementById('date').max = new Date().toISOString().split('T')[0];
     </script>
 </body>
 </html>
