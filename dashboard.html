@@ -57,12 +57,6 @@
             border: none;
             border-radius: 5px;
             cursor: pointer;
-            transition: all 0.3s ease;
-        }
-
-        .nav-btn:hover {
-            background-color: white;
-            transform: translateY(-2px);
         }
 
         .logout-btn {
@@ -85,10 +79,6 @@
             justify-content: space-between;
             align-items: center;
             margin-bottom: 2rem;
-            padding: 1rem;
-            background: white;
-            border-radius: 10px;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
         }
 
         .action-buttons {
@@ -112,7 +102,6 @@
 
         .btn-primary:hover {
             background-color: #006666;
-            transform: translateY(-2px);
         }
 
         .items-grid {
@@ -126,11 +115,6 @@
             border-radius: 10px;
             padding: 1.5rem;
             box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-            transition: transform 0.3s ease;
-        }
-
-        .item-card:hover {
-            transform: translateY(-5px);
         }
 
         .item-image {
@@ -141,28 +125,9 @@
             margin-bottom: 1rem;
         }
 
-        .item-details {
-            padding: 1rem 0;
-        }
-
         .item-details h3 {
             color: #008080;
             margin-bottom: 0.5rem;
-            font-size: 1.2rem;
-        }
-
-        .item-details p {
-            margin: 0.5rem 0;
-            color: #666;
-        }
-
-        .owner-info {
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-            margin: 0.5rem 0;
-            color: #333;
-            font-weight: 500;
         }
 
         .item-status {
@@ -171,7 +136,6 @@
             border-radius: 15px;
             font-size: 0.9rem;
             margin: 0.5rem 0;
-            font-weight: 500;
         }
 
         .status-lost {
@@ -193,10 +157,6 @@
             margin-bottom: 2rem;
             display: flex;
             gap: 1rem;
-            padding: 1rem;
-            background: white;
-            border-radius: 10px;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
         }
 
         .filter-select {
@@ -204,13 +164,6 @@
             border: 1px solid #ddd;
             border-radius: 5px;
             font-size: 1rem;
-            min-width: 150px;
-            cursor: pointer;
-        }
-
-        .filter-select:focus {
-            outline: none;
-            border-color: #008080;
         }
 
         .notification-badge {
@@ -222,55 +175,36 @@
             margin-left: 0.5rem;
         }
 
-        .pagination {
-            display: flex;
-            justify-content: center;
-            gap: 1rem;
-            margin-top: 2rem;
-            padding: 1rem;
-        }
-
-        .page-btn {
-            padding: 0.5rem 1rem;
-            border: 1px solid #008080;
+        .security-modal {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
             background: white;
-            color: #008080;
-            border-radius: 5px;
-            cursor: pointer;
-            transition: all 0.3s ease;
+            padding: 2rem;
+            border-radius: 10px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.2);
+            z-index: 1001;
+            max-width: 400px;
+            width: 90%;
         }
 
-        .page-btn:hover {
-            background: #008080;
-            color: white;
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0,0,0,0.5);
+            z-index: 1000;
         }
 
-        @media (max-width: 768px) {
-            .nav-buttons {
-                display: none;
-            }
-
-            .navbar {
-                padding: 1rem;
-            }
-
-            .container {
-                padding: 1rem;
-            }
-
-            .dashboard-header {
-                flex-direction: column;
-                gap: 1rem;
-            }
-
-            .action-buttons {
-                width: 100%;
-                flex-direction: column;
-            }
-
-            .filters {
-                flex-direction: column;
-            }
+        .error-message {
+            color: #ff4444;
+            margin-top: 0.5rem;
+            display: none;
         }
     </style>
 </head>
@@ -322,79 +256,38 @@
         <div class="items-grid" id="itemsContainer">
             <!-- Items will be dynamically loaded here -->
         </div>
+    </div>
 
-        <div class="pagination">
-            <button class="page-btn" onclick="window.location.href='login.html'">Previous</button>
-            <button class="page-btn" onclick="nextPage()">Next</button>
+    <!-- Security Verification Modal -->
+    <div class="modal-overlay" id="modalOverlay"></div>
+    <div class="security-modal" id="securityModal">
+        <h3>Security Verification</h3>
+        <p id="securityQuestion"></p>
+        <input type="text" id="securityAnswer" placeholder="Your answer" style="width: 100%; margin: 1rem 0; padding: 0.5rem;">
+        <div class="error-message" id="answer-error">Please provide the correct answer</div>
+        <div style="display: flex; gap: 1rem; margin-top: 1rem;">
+            <button class="btn btn-primary" onclick="submitSecurityAnswer()">Submit</button>
+            <button class="btn" onclick="closeSecurityModal()">Cancel</button>
         </div>
     </div>
 
     <script>
         let items = [];
+        let currentClaimItem = null;
 
         function loadDashboard() {
-            // Load points
             const points = localStorage.getItem('rewardPoints') || 0;
             document.getElementById('pointsIndicator').textContent = points;
 
-            // Load notifications
             const notifications = JSON.parse(localStorage.getItem('notifications')) || [];
             document.getElementById('notificationCount').textContent = notifications.length;
 
-            // Load items
-            items = [
-                {
-                    id: 1,
-                    title: "Black Leather Wallet",
-                    owner: "Sneha Sharma",
-                    category: "wallet",
-                    status: "lost",
-                    description: "Lost near the central park. Contains ID and credit cards.",
-                    date: "2024-01-15",
-                    image: "https://via.placeholder.com/300x200"
-                },
-                {
-                    id: 2,
-                    title: "iPhone 13",
-                    owner: "Arjun Mehta",
-                    category: "electronics",
-                    status: "found",
-                    description: "Found at the university library, blue case.",
-                    date: "2024-01-16",
-                    image: "https://via.placeholder.com/300x200"
-                },
-                {
-                    id: 3,
-                    title: "Gold hoop Earrings",
-                    owner: "Visali Mahadevan",
-                    category: "jewelry",
-                    status: "lost",
-                    description: "Lost at Olive Garden restaurant. White gold with diamond.",
-                    date: "2024-01-18",
-                    image: "https://via.placeholder.com/300x200"
-                },
-                {
-                    id: 4,
-                    title: "ID card @ PRP 101",
-                    owner: "Varun Sharma",
-                    category: "documents",
-                    status: "found",
-                    description: "Found at airport terminal 3, brown leather.",
-                    date: "2024-01-19",
-                    image: "https://via.placeholder.com/300x200"
-                },
-                {
-                    id: 5,
-                    title: "Car Keys",
-                    owner: "Pia Jaisingh",
-                    category: "keys",
-                    status: "lost",
-                    description: "Lost in shopping mall parking lot. Toyota key with black fob.",
-                    date: "2024-01-20",
-                    image: "https://via.placeholder.com/300x200"
-                }
-            ];
-
+            // Load both lost and found items
+            const lostItems = JSON.parse(localStorage.getItem('lostItems')) || [];
+            const foundItems = JSON.parse(localStorage.getItem('foundItems')) || [];
+            
+            // Combine both arrays
+            items = [...lostItems, ...foundItems];
             displayItems(items);
         }
 
@@ -411,13 +304,16 @@
                         <h3>${item.title}</h3>
                         <div class="owner-info">
                             <span>👤</span>
-                            <span>${item.owner}</span>
+                            <span>${item.status === 'found' ? 'Found by: ' + item.finder : 'Reported by: ' + item.owner}</span>
                         </div>
                         <p>${item.description}</p>
                         <span class="item-status status-${item.status}">${item.status.toUpperCase()}</span>
                         <p>Date: ${item.date}</p>
+                        <p>Location: ${item.location}</p>
                         ${item.status === 'found' ? 
-                            `<button class="btn btn-primary" onclick="confirmItemClaim(${item.id})">Claim Item</button>` : 
+                            `<button class="btn btn-primary" onclick="claimFoundItem(${item.id})">Claim This Item</button>` : 
+                            item.status === 'lost' ?
+                            `<button class="btn btn-primary" onclick="confirmItemClaim(${item.id})">I Found This</button>` :
                             ''
                         }
                     </div>
@@ -442,15 +338,68 @@
         }
 
         function confirmItemClaim(itemId) {
-            if(confirm("Confirm that this item has been successfully returned to its owner?")) {
-                awardPoints(itemId);
+            const item = items.find(i => i.id === itemId);
+            if (!item) return;
+
+            currentClaimItem = item;
+            document.getElementById('securityQuestion').textContent = item.securityQuestion;
+            document.getElementById('securityAnswer').value = '';
+            document.getElementById('answer-error').style.display = 'none';
+            document.getElementById('modalOverlay').style.display = 'block';
+            document.getElementById('securityModal').style.display = 'block';
+        }
+
+        function claimFoundItem(itemId) {
+            const item = items.find(i => i.id === itemId);
+            if (!item) return;
+
+            if(confirm("Would you like to claim this item? You will need to provide proof of ownership.")) {
                 // Update item status
-                const item = items.find(i => i.id === itemId);
-                if (item) {
-                    item.status = 'claimed';
-                    displayItems(items);
-                }
+                item.status = 'claimed';
+                
+                // Update foundItems in localStorage
+                let foundItems = JSON.parse(localStorage.getItem('foundItems')) || [];
+                foundItems = foundItems.map(i => i.id === itemId ? {...i, status: 'claimed'} : i);
+                localStorage.setItem('foundItems', JSON.stringify(foundItems));
+                
+                // Refresh display
+                displayItems(items);
+                alert("Please visit our nearest center with proof of ownership to claim this item.");
             }
+        }
+
+        function submitSecurityAnswer() {
+            const answer = document.getElementById('securityAnswer').value.trim();
+            
+            if (!answer) {
+                document.getElementById('answer-error').style.display = 'block';
+                return;
+            }
+
+            if (answer.toLowerCase() === currentClaimItem.securityAnswer.toLowerCase()) {
+                closeSecurityModal();
+                currentClaimItem.status = 'claimed';
+                
+                // Update localStorage
+                const lostItems = JSON.parse(localStorage.getItem('lostItems')) || [];
+                const updatedItems = lostItems.map(item => 
+                    item.id === currentClaimItem.id ? {...item, status: 'claimed'} : item
+                );
+                localStorage.setItem('lostItems', JSON.stringify(updatedItems));
+                
+                // Award points
+                awardPoints(currentClaimItem.id);
+                displayItems(items);
+                alert("Item claimed successfully! The owner will be notified.");
+            } else {
+                document.getElementById('answer-error').style.display = 'block';
+            }
+        }
+
+        function closeSecurityModal() {
+            document.getElementById('modalOverlay').style.display = 'none';
+            document.getElementById('securityModal').style.display = 'none';
+            currentClaimItem = null;
         }
 
         function awardPoints(itemId) {
@@ -471,17 +420,13 @@
         }
 
         function confirmLogout() {
-            if (confirm("Are you sure you want to logout? Any unsaved changes will be lost!")) {
+            if (confirm("Are you sure you want to logout?")) {
                 window.location.href = 'index.html';
             }
         }
 
-        function nextPage() {
-            const currentPage = parseInt(new URLSearchParams(window.location.search).get('page') || 1);
-            window.location.href = `dashboard.html?page=${currentPage + 1}`;
-        }
-
         window.onload = loadDashboard;
+        document.getElementById('modalOverlay').onclick = closeSecurityModal;
     </script>
 </body>
 </html>
