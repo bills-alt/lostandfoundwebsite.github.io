@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Report Found Item - Lost and Linked</title>
+    <title>Dashboard - Lost and Linked</title>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
     <style>
         * {
@@ -15,7 +15,6 @@
 
         body {
             background-color: #f5f5f5;
-            min-height: 100vh;
         }
 
         .navbar {
@@ -24,6 +23,10 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
         }
 
         .logo {
@@ -31,6 +34,29 @@
             font-size: 1.5rem;
             font-weight: 600;
             text-decoration: none;
+        }
+
+        .nav-buttons {
+            display: flex;
+            gap: 1rem;
+            align-items: center;
+        }
+
+        .points-display {
+            background: rgba(255,255,255,0.2);
+            padding: 0.5rem 1rem;
+            border-radius: 5px;
+            color: white;
+            font-weight: 500;
+        }
+
+        .nav-btn {
+            background-color: rgba(255,255,255,0.9);
+            color: #008080;
+            padding: 0.5rem 1rem;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
         }
 
         .logout-btn {
@@ -43,50 +69,25 @@
         }
 
         .container {
-            max-width: 800px;
-            margin: 2rem auto;
-            padding: 2rem;
+            max-width: 1200px;
+            margin: 80px auto 2rem;
+            padding: 0 2rem;
         }
 
-        .form-container {
-            background: white;
-            padding: 2rem;
-            border-radius: 15px;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
-        }
-
-        h2 {
-            color: #008080;
+        .dashboard-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
             margin-bottom: 2rem;
-            text-align: center;
         }
 
-        .form-group {
-            margin-bottom: 1.5rem;
-        }
-
-        label {
-            display: block;
-            margin-bottom: 0.5rem;
-            color: #333;
-            font-weight: 500;
-        }
-
-        input, textarea, select {
-            width: 100%;
-            padding: 0.8rem;
-            border: 1px solid #ddd;
-            border-radius: 5px;
-            font-size: 1rem;
-        }
-
-        textarea {
-            resize: vertical;
-            min-height: 100px;
+        .action-buttons {
+            display: flex;
+            gap: 1rem;
         }
 
         .btn {
-            padding: 1rem 2rem;
+            padding: 0.8rem 1.5rem;
             border: none;
             border-radius: 5px;
             cursor: pointer;
@@ -97,31 +98,112 @@
         .btn-primary {
             background-color: #008080;
             color: white;
-            width: 100%;
         }
 
         .btn-primary:hover {
             background-color: #006666;
         }
 
-        .navigation {
-            display: flex;
-            justify-content: space-between;
-            margin-top: 2rem;
+        .items-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 2rem;
         }
 
-        .nav-btn {
-            padding: 0.5rem 1rem;
-            background-color: transparent;
-            border: 1px solid #008080;
-            color: #008080;
+        .item-card {
+            background: white;
+            border-radius: 10px;
+            padding: 1.5rem;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        .item-image {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
             border-radius: 5px;
-            cursor: pointer;
+            margin-bottom: 1rem;
         }
 
-        .image-preview {
-            max-width: 200px;
-            margin-top: 1rem;
+        .item-details h3 {
+            color: #008080;
+            margin-bottom: 0.5rem;
+        }
+
+        .item-status {
+            display: inline-block;
+            padding: 0.3rem 0.8rem;
+            border-radius: 15px;
+            font-size: 0.9rem;
+            margin: 0.5rem 0;
+        }
+
+        .status-lost {
+            background-color: #ffebee;
+            color: #c62828;
+        }
+
+        .status-found {
+            background-color: #e8f5e9;
+            color: #2e7d32;
+        }
+
+        .status-claimed {
+            background-color: #e3f2fd;
+            color: #1565c0;
+        }
+
+        .filters {
+            margin-bottom: 2rem;
+            display: flex;
+            gap: 1rem;
+        }
+
+        .filter-select {
+            padding: 0.8rem;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 1rem;
+        }
+
+        .notification-badge {
+            background-color: #ff4444;
+            color: white;
+            padding: 0.2rem 0.5rem;
+            border-radius: 50%;
+            font-size: 0.8rem;
+            margin-left: 0.5rem;
+        }
+
+        .security-modal {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: white;
+            padding: 2rem;
+            border-radius: 10px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.2);
+            z-index: 1001;
+            max-width: 400px;
+            width: 90%;
+        }
+
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0,0,0,0.5);
+            z-index: 1000;
+        }
+
+        .error-message {
+            color: #ff4444;
+            margin-top: 0.5rem;
             display: none;
         }
     </style>
@@ -129,101 +211,222 @@
 <body>
     <nav class="navbar">
         <a href="dashboard.html" class="logo">Lost and Linked</a>
-        <a href="index.html"><button class="logout-btn">Logout</button></a>
+        <div class="nav-buttons">
+            <div class="points-display">
+                <span id="pointsIndicator">0</span> points
+            </div>
+            <button class="nav-btn" onclick="window.location.href='profile.html'">Profile</button>
+            <button class="nav-btn" onclick="window.location.href='notification-settings.html'">
+                Notifications
+                <span class="notification-badge" id="notificationCount">0</span>
+            </button>
+            <button class="logout-btn" onclick="confirmLogout()">Logout</button>
+        </div>
     </nav>
 
     <div class="container">
-        <div class="form-container">
-            <h2>Report Found Item</h2>
-            <form onsubmit="return validateForm()">
-                <div class="form-group">
-                    <label for="title">Item Title*</label>
-                    <input type="text" id="title" required placeholder="E.g., Found iPhone">
-                </div>
+        <div class="dashboard-header">
+            <h2>Dashboard</h2>
+            <div class="action-buttons">
+                <button class="btn btn-primary" onclick="window.location.href='report-lost.html'">Report Lost Item</button>
+                <button class="btn btn-primary" onclick="window.location.href='report-found.html'">Report Found Item</button>
+            </div>
+        </div>
 
-                <div class="form-group">
-                    <label for="category">Category*</label>
-                    <select id="category" required>
-                        <option value="">Select Category</option>
-                        <option value="electronics">Electronics</option>
-                        <option value="wallet">Wallet/Purse</option>
-                        <option value="documents">Documents</option>
-                        <option value="jewelry">Jewelry</option>
-                        <option value="keys">Keys</option>
-                        <option value="clothing">Clothing</option>
-                        <option value="other">Other</option>
-                    </select>
-                </div>
+        <div class="filters">
+            <select id="categoryFilter" onchange="filterItems()" class="filter-select">
+                <option value="all">All Categories</option>
+                <option value="electronics">Electronics</option>
+                <option value="wallet">Wallet/Purse</option>
+                <option value="documents">Documents</option>
+                <option value="jewelry">Jewelry</option>
+                <option value="keys">Keys</option>
+                <option value="clothing">Clothing</option>
+                <option value="other">Other</option>
+            </select>
 
-                <div class="form-group">
-                    <label for="description">Description*</label>
-                    <textarea id="description" required placeholder="Provide general description without revealing unique identifying details"></textarea>
-                </div>
+            <select id="statusFilter" onchange="filterItems()" class="filter-select">
+                <option value="all">All Status</option>
+                <option value="lost">Lost</option>
+                <option value="found">Found</option>
+                <option value="claimed">Claimed</option>
+            </select>
+        </div>
 
-                <div class="form-group">
-                    <label for="date">Date Found*</label>
-                    <input type="date" id="date" required>
-                </div>
+        <div class="items-grid" id="itemsContainer">
+            <!-- Items will be dynamically loaded here -->
+        </div>
+    </div>
 
-                <div class="form-group">
-                    <label for="location">Location Found*</label>
-                    <input type="text" id="location" required placeholder="Where did you find the item?">
-                </div>
-
-                <div class="form-group">
-                    <label for="image">Upload Images</label>
-                    <input type="file" id="image" accept="image/*" multiple onchange="previewImage(this)">
-                    <img id="imagePreview" class="image-preview">
-                    <small>Upload images that don't reveal identifying details</small>
-                </div>
-
-                <div class="form-group">
-                    <label for="storage">Current Storage Location*</label>
-                    <input type="text" id="storage" required placeholder="Where are you keeping the item?">
-                </div>
-
-                <div class="form-group">
-                    <label for="identifying">Identifying Details*</label>
-                    <textarea id="identifying" required placeholder="List specific details that only the owner would know (will not be publicly displayed)"></textarea>
-                </div>
-
-                <div class="form-group">
-                    <label for="contact">Your Contact Information*</label>
-                    <input type="text" id="contact" required placeholder="How can we reach you?">
-                </div>
-
-                <div class="navigation">
-                    <a href="dashboard.html"><button type="button" class="nav-btn">Previous</button></a>
-                    <button type="submit" class="btn btn-primary">Submit Report</button>
-                </div>
-            </form>
+    <!-- Security Verification Modal -->
+    <div class="modal-overlay" id="modalOverlay"></div>
+    <div class="security-modal" id="securityModal">
+        <h3>Security Verification</h3>
+        <p id="securityQuestion"></p>
+        <input type="text" id="securityAnswer" placeholder="Your answer" style="width: 100%; margin: 1rem 0; padding: 0.5rem;">
+        <div class="error-message" id="answer-error">Please provide the correct answer</div>
+        <div style="display: flex; gap: 1rem; margin-top: 1rem;">
+            <button class="btn btn-primary" onclick="submitSecurityAnswer()">Submit</button>
+            <button class="btn" onclick="closeSecurityModal()">Cancel</button>
         </div>
     </div>
 
     <script>
-        function validateForm() {
-            const requiredFields = ['title', 'category', 'description', 'date', 'location', 'storage', 'identifying', 'contact'];
-            for (let field of requiredFields) {
-                const value = document.getElementById(field).value.trim();
-                if (!value) {
-                    alert('Please fill in all required fields');
-                    return false;
-                }
-            }
-            return true;
+        let items = [];
+        let currentClaimItem = null;
+
+        function loadDashboard() {
+            const points = localStorage.getItem('rewardPoints') || 0;
+            document.getElementById('pointsIndicator').textContent = points;
+
+            const notifications = JSON.parse(localStorage.getItem('notifications')) || [];
+            document.getElementById('notificationCount').textContent = notifications.length;
+
+            // Load both lost and found items
+            const lostItems = JSON.parse(localStorage.getItem('lostItems')) || [];
+            const foundItems = JSON.parse(localStorage.getItem('foundItems')) || [];
+            
+            // Combine both arrays
+            items = [...lostItems, ...foundItems];
+            displayItems(items);
         }
 
-        function previewImage(input) {
-            const preview = document.getElementById('imagePreview');
-            if (input.files && input.files[0]) {
-                const reader = new FileReader();
-                reader.onload = function(e) {
-                    preview.src = e.target.result;
-                    preview.style.display = 'block';
-                }
-                reader.readAsDataURL(input.files[0]);
+        function displayItems(itemsToShow) {
+            const container = document.getElementById('itemsContainer');
+            container.innerHTML = '';
+
+            itemsToShow.forEach(item => {
+                const card = document.createElement('div');
+                card.className = 'item-card';
+                card.innerHTML = `
+                    <img src="${item.image}" alt="${item.title}" class="item-image">
+                    <div class="item-details">
+                        <h3>${item.title}</h3>
+                        <div class="owner-info">
+                            <span>👤</span>
+                            <span>${item.status === 'found' ? 'Found by: ' + item.finder : 'Reported by: ' + item.owner}</span>
+                        </div>
+                        <p>${item.description}</p>
+                        <span class="item-status status-${item.status}">${item.status.toUpperCase()}</span>
+                        <p>Date: ${item.date}</p>
+                        <p>Location: ${item.location}</p>
+                        ${item.status === 'found' ? 
+                            `<button class="btn btn-primary" onclick="claimFoundItem(${item.id})">Claim This Item</button>` : 
+                            item.status === 'lost' ?
+                            `<button class="btn btn-primary" onclick="confirmItemClaim(${item.id})">I Found This</button>` :
+                            ''
+                        }
+                    </div>
+                `;
+                container.appendChild(card);
+            });
+        }
+
+        function filterItems() {
+            const category = document.getElementById('categoryFilter').value;
+            const status = document.getElementById('statusFilter').value;
+
+            let filteredItems = items;
+            if (category !== 'all') {
+                filteredItems = filteredItems.filter(item => item.category === category);
+            }
+            if (status !== 'all') {
+                filteredItems = filteredItems.filter(item => item.status === status);
+            }
+
+            displayItems(filteredItems);
+        }
+
+        function confirmItemClaim(itemId) {
+            const item = items.find(i => i.id === itemId);
+            if (!item) return;
+
+            currentClaimItem = item;
+            document.getElementById('securityQuestion').textContent = item.securityQuestion;
+            document.getElementById('securityAnswer').value = '';
+            document.getElementById('answer-error').style.display = 'none';
+            document.getElementById('modalOverlay').style.display = 'block';
+            document.getElementById('securityModal').style.display = 'block';
+        }
+
+        function claimFoundItem(itemId) {
+            const item = items.find(i => i.id === itemId);
+            if (!item) return;
+
+            if(confirm("Would you like to claim this item? You will need to provide proof of ownership.")) {
+                // Update item status
+                item.status = 'claimed';
+                
+                // Update foundItems in localStorage
+                let foundItems = JSON.parse(localStorage.getItem('foundItems')) || [];
+                foundItems = foundItems.map(i => i.id === itemId ? {...i, status: 'claimed'} : i);
+                localStorage.setItem('foundItems', JSON.stringify(foundItems));
+                
+                // Refresh display
+                displayItems(items);
+                alert("Please visit our nearest center with proof of ownership to claim this item.");
             }
         }
+
+        function submitSecurityAnswer() {
+            const answer = document.getElementById('securityAnswer').value.trim();
+            
+            if (!answer) {
+                document.getElementById('answer-error').style.display = 'block';
+                return;
+            }
+
+            if (answer.toLowerCase() === currentClaimItem.securityAnswer.toLowerCase()) {
+                closeSecurityModal();
+                currentClaimItem.status = 'claimed';
+                
+                // Update localStorage
+                const lostItems = JSON.parse(localStorage.getItem('lostItems')) || [];
+                const updatedItems = lostItems.map(item => 
+                    item.id === currentClaimItem.id ? {...item, status: 'claimed'} : item
+                );
+                localStorage.setItem('lostItems', JSON.stringify(updatedItems));
+                
+                // Award points
+                awardPoints(currentClaimItem.id);
+                displayItems(items);
+                alert("Item claimed successfully! The owner will be notified.");
+            } else {
+                document.getElementById('answer-error').style.display = 'block';
+            }
+        }
+
+        function closeSecurityModal() {
+            document.getElementById('modalOverlay').style.display = 'none';
+            document.getElementById('securityModal').style.display = 'none';
+            currentClaimItem = null;
+        }
+
+        function awardPoints(itemId) {
+            let currentPoints = parseInt(localStorage.getItem('rewardPoints')) || 0;
+            currentPoints += 10;
+            localStorage.setItem('rewardPoints', currentPoints);
+
+            let history = JSON.parse(localStorage.getItem('pointsHistory')) || [];
+            history.unshift({
+                points: 10,
+                description: `Item returned successfully - ${new Date().toLocaleDateString()}`,
+                date: new Date()
+            });
+            localStorage.setItem('pointsHistory', JSON.stringify(history));
+
+            document.getElementById('pointsIndicator').textContent = currentPoints;
+            alert('Congratulations! You earned 10 points for helping return a lost item!');
+        }
+
+        function confirmLogout() {
+            if (confirm("Are you sure you want to logout?")) {
+                window.location.href = 'index.html';
+            }
+        }
+
+        window.onload = loadDashboard;
+        document.getElementById('modalOverlay').onclick = closeSecurityModal;
     </script>
 </body>
 </html>
